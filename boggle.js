@@ -6,7 +6,6 @@ class Bogle{
     }
     
     solve(){
-        clearScreen()
         let hasil = []
         for(let i = 0; i < this.boards.length; i++){
             for( let j = 0; j < this.boards[i].length; j++){
