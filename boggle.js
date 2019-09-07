@@ -2,19 +2,23 @@ let data = require('./data');
 
 class Boggle {
     constructor() {
-        this.library = this.generateLibrary();
-        this.board = [];
+        this.library = [];
         this.dictionary = data.words;
+        this.board = [];
+        this.letters = [];
         this.solutions = [];
     }
 
     shake(side) {
+        this.generateLibrary(side);
+
         let result = [];
         for(let i = 0; i < side; i++) {
             result[i] = [];
             for(let j = 0; j < side; j++) {
                 let randomIndex = Math.floor(Math.random() * Math.floor(this.library.length));
                 result[i].push(this.library[randomIndex]);
+                this.letters.push(this.library[randomIndex]);
             }
         }
 
@@ -23,6 +27,8 @@ class Boggle {
     }
 
     solve() {
+        this.trimDictionary();
+        console.log('solution:');
         //generate flag isVisited that mirrors the board and set all value to false
         let isVisited = [];
         for(let i = 0; i < this.board.length; i++) {
@@ -38,6 +44,8 @@ class Boggle {
                 this.findWord(i, j, isVisited, '');
             }
         }
+
+        console.log(`${this.solutions.length} words found!`);
     }
 
     findWord(x, y, isVisited, word) {
@@ -51,11 +59,10 @@ class Boggle {
             }
         }
 
-        //continue findWord to 8 cell around current cell
+        //continue findWord to 8 cells around current cell
         for(let i = x - 1; i <= x + 1; i++) {
             for(let j = y - 1; j <= y + 1; j++) {
                 if(i >= 0 && j >= 0 && i < this.board.length && j < this.board[x].length && !isVisited[i][j]) {
-                    // console.log(this.board[i][j])
                     this.findWord(i, j, isVisited, word);
                 }
             }
@@ -64,21 +71,31 @@ class Boggle {
         isVisited[x][y] = false;
     }
 
-    generateLibrary() {
+    trimDictionary() {
+        //remove words that contains characters other than in board
+        let pattern = `^[${this.letters.join('')}]+$`;
+        let regexBoard = new RegExp(pattern, 'g');
+        for(let i = this.dictionary.length; i >= 0; i--) {
+            if(!regexBoard.test(this.dictionary[i])) {
+                this.dictionary.splice(i, 1);
+            }
+        }
+    }
+
+    generateLibrary(side) {
         let result = [];
         let vowels = ['A', 'E', 'I', 'U', 'O'];
         for(let i = 0; i < 26; i++) {
             let letter = String.fromCharCode(65 + i);
             result.push(letter);
             if(vowels.includes(letter)) {
-                for(let j = 0; j < 4; j++) {
+                for(let j = 0; j < side / 2; j++) {
                     result.push(letter);
                 }
-                result.push(letter);
             }
         }
         
-        return result;
+        this.library = result;
     }
 
 }
