@@ -37,6 +37,7 @@ class Boggle {
     let result = [];
     for(let i = 0; i < this.ukuran; i++){
       for(let j = 0; j < this.ukuran; j++){
+        // console.log(this.board)
         for(let k = 0; k < kamus.length; k++){
           let kata = kamus[k];
           if(kata[0] == this.board[i][j] && this.dfs(kata,i,j)){
@@ -46,7 +47,6 @@ class Boggle {
       }
     }
     console.log(result);
-    
     return result;
   }
 
@@ -88,6 +88,6 @@ class Boggle {
 
 let game = new Boggle(kamus);
 
-console.log(game.solve());
+game.solve()
 console.log(game.board);
 
