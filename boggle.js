@@ -1,7 +1,10 @@
+let data = require('./data');
+
 class Boggle {
     constructor() {
         this.library = this.generateLibrary();
         this.board = [];
+        this.words = data.words;
     }
 
     shake(side) {
