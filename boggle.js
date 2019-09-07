@@ -3,15 +3,8 @@ let data = require('./data');
 class Boggle {
     constructor() {
         this.library = this.generateLibrary();
-        this.board = [
-            ['D', 'G', 'H', 'I'],
-            ['K', 'L', 'P', 'S'],
-            ['Y', 'E', 'U', 'T'],
-            ['E', 'O', 'R', 'N'],
-        ];
-        this.dictionary = [
-            'APPLE', 'SIT', 'TRIP', 'TURN', 'SUPER', 'DLEE', 'DLHSUNROEY'
-        ];
+        this.board = [];
+        this.dictionary = data.words;
         this.solutions = [];
     }
 
@@ -25,10 +18,12 @@ class Boggle {
             }
         }
 
-        return this.board;
+        this.board = result;
+        console.log(result);
     }
 
     solve() {
+        //generate flag isVisited that mirrors the board and set all value to false
         let isVisited = [];
         for(let i = 0; i < this.board.length; i++) {
             isVisited[i] = [];
@@ -37,7 +32,7 @@ class Boggle {
             }
         }
 
-        //find every possible words that starts from every cell in board
+        //loop every cell in board to find words that starts with the cell's letter value
         for(let i = 0; i < this.board.length; i++) {
             for(let j = 0; j < this.board[i].length; j++) {
                 this.findWord(i, j, isVisited, '');
@@ -45,15 +40,14 @@ class Boggle {
         }
     }
 
-    findWord(x, y, isVisited, strWord) {
+    findWord(x, y, isVisited, word) {
         isVisited[x][y] = true;
-        strWord += this.board[x][y];
+        word += this.board[x][y];
 
-        // console.log(strWord);
-        if(this.dictionary.includes(strWord)) {
-            if(!this.solutions.includes(strWord)) {
-                this.solutions.push(strWord);
-                console.log(strWord);
+        if(this.dictionary.includes(word)) {
+            if(!this.solutions.includes(word)) {
+                this.solutions.push(word);
+                console.log(word);
             }
         }
 
@@ -62,7 +56,7 @@ class Boggle {
             for(let j = y - 1; j <= y + 1; j++) {
                 if(i >= 0 && j >= 0 && i < this.board.length && j < this.board[x].length && !isVisited[i][j]) {
                     // console.log(this.board[i][j])
-                    this.findWord(i, j, isVisited, strWord);
+                    this.findWord(i, j, isVisited, word);
                 }
             }
         }
@@ -77,9 +71,9 @@ class Boggle {
             let letter = String.fromCharCode(65 + i);
             result.push(letter);
             if(vowels.includes(letter)) {
-                // for(let j = 0; j < 4; j++) {
-                //     result.push(letter);
-                // }
+                for(let j = 0; j < 4; j++) {
+                    result.push(letter);
+                }
                 result.push(letter);
             }
         }
@@ -90,6 +84,5 @@ class Boggle {
 }
 
 let game = new Boggle();
-console.log(game.dictionary);
-console.log(game.shake(4));
+game.shake(4);
 game.solve();
