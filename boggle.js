@@ -38,10 +38,10 @@ class Bogle{
         this.visited.push([[i],[j]])
 
         // Cek  words index+1 
-        // Cek Horizontal
+        // Cek Vertical
         if((this.checkAll(board, words, i-1, j, index+1)) ||
         (this.checkAll(board, words, i+1, j, index+1)) ||
-        // Cek Vertical
+        // Cek  Horizontal
         (this.checkAll(board, words, i, j-1, index+1)) ||
         (this.checkAll(board, words, i, j+1, index+1)) ||
         // Cek Diagonal
