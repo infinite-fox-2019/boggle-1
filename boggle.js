@@ -86,6 +86,6 @@ class Boggle {
   }
 }
 
-const boggle = new Boggle(words, alphabet, 10)
+const boggle = new Boggle(words, alphabet, 4)
 
 boggle.solver()
