@@ -1,20 +1,11 @@
 const words = require('./data')
-// const alphabet = 'aaaaabcdeeeeefghiiiiijklmnooooopqrstuuuuuvwxyz'
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-// const words = ['COOL', 'CACA', 'CALL', 'BLUE', 'MAN', 'YELL', 'GIRL', 'CODE', 'TELL', 'EYE', 'DATE']
-// const alphabet = 'cmtsdaxilltepeys'
-
-// const board = [
-//   ['c', 'm', 't', 's'],
-//   ['d', 'a', 'x', 'i'],
-//   ['l', 'l', 't', 'e'],
-//   ['p', 'e', 'y', 's'],
-// ]
 
 class Boggle {
-  constructor(words, alphabet) {
+  constructor(words, alphabet, dimension) {
     this.words = words
     this.alphabet = alphabet
+    this.dimension = dimension
     this.board = this.board()
     this.moves = [ [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1] ]
   }
@@ -50,8 +41,8 @@ class Boggle {
   solver() {
     const result = []
 
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
+    for (let i = 0; i < this.dimension; i++) {
+      for (let j = 0; j < this.dimension; j++) {
         for (let k = 0; k < this.words.length; k++) {
           const word = this.words[k]
           if (this.board[i][j] === word[0] && this.findNextLetters(word, i, j)) {
@@ -62,6 +53,7 @@ class Boggle {
     }
 
     const filterResult = result.filter((item, index) => result.indexOf(item) === index)
+    console.log(`Found ${filterResult.length} ${(filterResult.length === 1 ? 'word' : 'words')} from ${this.words.length} words`)
     console.log(filterResult.join(', '))
     return filterResult
   }
@@ -69,7 +61,7 @@ class Boggle {
   generateLetters() {
     let randomLetters = ''
 
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < this.dimension * this.dimension; i++) {
       const randomNum = Math.floor(Math.random() * 26)
       randomLetters += this.alphabet[randomNum]
     }
@@ -81,9 +73,9 @@ class Boggle {
     const randomLetters = this.generateLetters()
     const board = []
 
-    for (let i = 0; i < randomLetters.length; i += 4) {
+    for (let i = 0; i < randomLetters.length; i += this.dimension) {
       const temp = []
-      for (let j = 0; j < 4; j++) {
+      for (let j = 0; j < this.dimension; j++) {
         temp.push(randomLetters[i + j].toUpperCase())
       }
       board.push(temp)
@@ -94,6 +86,6 @@ class Boggle {
   }
 }
 
-const boggle = new Boggle(words, alphabet)
+const boggle = new Boggle(words, alphabet, 10)
 
 boggle.solver()
