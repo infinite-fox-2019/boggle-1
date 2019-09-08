@@ -50,92 +50,259 @@ class Boogle {
     };
     //release 2
     solver() {
+        let result = [];
         let board = this.shake();
         let kamus = this.kamus();
         console.log(`Random Kamus From data.js : 
         ${kamus}`);
         console.log(board);
         console.log(`Board ukuran ${this.input}X${this.input}`);
-        logic
+        console.log(`kata yg di temukan : `)
+        //logic
         for (let i = 0; i < kamus.length; i++) {
-            let kata = kamus[i];
-            let counterHuruf = 0;
-            while (kata.length > 0) {
-                let huruf = kata[counterHuruf];
-                for (let j = 0; j < board.length; j++) {
-                    for (let k = 0; k < board[j].length; k++) {
-                        if (huruf === board[j][k]) {
-                            let row = j;
-                            let col = k;
-                            if (this.checkCondition(kata, row, col)) {
-
-                            }
-                        }
-                    }
+            var kata = kamus[i];
+            var statusKata = true;
+            while (statusKata) {
+                if (this.checkStatusCondition(kata)) {
+                    statusKata = false;
                 }
+            }
+            if (statusKata === false) {
+                result.push(kata);
             }
         }
     };
 
-    checkCondition(kata, row, col) {
+    checkStatusCondition(kata) {
         let board = this.shake();
-        let arrayCheck = [];
-        for (let i = 1; i < kata.length; i++) {
-            let huruf = kata[i];
-            let status = true;
-            while (status) {
-                if (row === 0 && col === 0) {
-                    if (board[row][col + 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row + 1][col] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row + 1][col + 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    }
-                } else if (row === 0 && col === (this.input - 1)) {
-                    if (board[row][col - 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row + 1][col] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row + 1][col - 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    }
-                } else if (row === (this.input - 1) && col === 0) {
-                    if (board[row - 1][col] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row][col + 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row - 1][col + 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    }
-                } else if (row === 0 && col === (this.input - 1)) {
-                    if (board[row - 1][col] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row][col + 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
-                    } else if (board[row - 1][col + 1] === huruf) {
-                        status = false;
-                        arrayCheck.push('ada');
+        var newKata = kata;
+
+        for (let i = 1; i < newKata.length; i++) {
+            let huruf = newKata[i];
+            for (let j = 0; j < board.length; j++) {
+                for (let k = 0; k < board[j].length; k++) {
+                    let indexBoardNow = board[j][k];
+                    if (indexBoardNow === huruf) {
+                        let posRow = j;
+                        let posCol = k;
+                        let checkArrAda = this.checkNextIndexCondition(posRow, posCol, newKata);
+                        if (checkArrAda.length === newKata.length) {
+                            return true;
+                        }
+                        return false;
                     }
                 }
-                status = false;
             }
         }
-
-        return false;
     }
 
+    checkNextIndexCondition(posRow, posCol, newKata) {
+        var board = this.shake();
+        let counterKata = 0;
+        var row = posRow;
+        var col = posCol;
+        var listAda = [];
+        while (counterKata < newKata.length - 1) {
+            debugger;
+            var newRow = row;
+            var newCol = col;
+            if (newRow === 0 && newCol === 0) {
+                if (board[newRow][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                }
+            }
+            //pojok kanan atas
+            else if (newRow === 0 && newCol === (this.input - 1)) {
+                if (board[newRow][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                }
+            }
+            //pojok kiri bawah
+            else if (newRow === (this.input - 1) && newCol === 0) {
+                if (board[newRow - 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                }
+            }
+            //pojok kanan bawah
+            else if (newRow === 0 && newCol === (this.input - 1)) {
+                if (board[newRow - 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                }
+            }
+            //samping kiri
+            else if (newRow !== 0 || newRow !== (this.input - 1) && newCol === 0) {
+                if (board[newRow - 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                }
+            }
+            //atas
+            else if (newCol !== 0 || newCol !== (this.input - 1) && newRow === 0) {
+                if (board[newRow][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                }
+            }
+            //samping kanan
+            else if (newRow !== 0 || newRow !== (this.input - 1) && newCol === (this.input - 1)) {
+                if (board[newRow - 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                }
+            }
+            //bawah
+            else if (newCol !== 0 || newCol !== (this.input - 1) && newRow === (this.input - 1)) {
+                if (board[newRow][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                }
+            } else {
+                if (board[newRow - 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol + 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol + 1;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol;
+                    listAda.push('ada');
+                } else if (board[newRow + 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow + 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                } else if (board[newRow - 1][newCol - 1] === newKata[counterKata]) {
+                    newRow = newRow - 1;
+                    newCol = newCol - 1;
+                    listAda.push('ada');
+                }
+            }
+            counterKata++
+        }
+        return listAda;
+    }
 };
 //function untuk interface
 function setup() {
@@ -146,7 +313,6 @@ function setup() {
     //yg di outputkan :
     game.shake();
     game.solver();
-
 };
 //parameter inputan user dari node
 var parameter = process.argv.slice(2);
