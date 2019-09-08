@@ -1,7 +1,7 @@
-class TheBoogle {
-    //provide the boogle skeleton
+class TheBoggle {
+    //provide the boggle skeleton
     constructor() {
-        //the library is imported from the data file as an object of array
+        //the library is imported from the data.js file as an object of array
         this.lib = require('./data')
         this.board = []
         this.result = []
@@ -9,6 +9,9 @@ class TheBoogle {
 
     //head() is the main method to execute this game
     head(num) { 
+        //the num is obtained from terminal input : 
+        //node boggle.js 4 to provide a 4x4 board dimension
+        //node boogle.js 7 to provide a 7x7 board dimension
         if (process.argv[2] < 4 || !process.argv[2]) {
             num = 4
         } else {
@@ -98,8 +101,8 @@ class TheBoogle {
 
 }
 
-//create one instance child for the boogle parent named boogle
-let boogle = new TheBoogle()
+//create one instance child for the boggle parent named boggle
+let boggle = new TheBoggle()
 
 //proceed!
-boogle.head()
+boggle.head()
