@@ -1,8 +1,8 @@
 const library = require('./data')
 
 class Boggle {
-    constructor(library){
-        this.board= this.board(4)
+    constructor(library) {
+        this.board = this.board(4)
         this.library = library
     }
 
@@ -26,7 +26,7 @@ class Boggle {
         console.log(line);
     }
 
-    shake () {
+    shake() {
         let board = this.board
         let counter = 0
         let words = []
@@ -36,10 +36,10 @@ class Boggle {
                 counter++
             }
         }
-        return {words, counter }
+        return { words, counter }
     }
 
-    solve (word, board) {
+    solve(word, board) {
 
         let track = []
 
@@ -48,26 +48,26 @@ class Boggle {
         word = word.slice(1)
         for (let i = 0; i < word.length; i++) {
             let coord = track[track.length - 1]
-            let leftWord = word[i]
+            let letter = word[i]
             if (word[i] === undefined) {
                 return false
             }
-            if (N(coord, leftWord) && checkTrack(track, N(coord, leftWord))) {
-                track.push(N(coord, leftWord))
-            } else if (W(coord, leftWord) && checkTrack(track, W(coord, leftWord))) {
-                track.push(W(coord, leftWord))
-            } else if (E(coord, leftWord) && checkTrack(track, E(coord, leftWord))) {
-                track.push(E(coord, leftWord))
-            } else if (S(coord, leftWord) && checkTrack(track, S(coord, leftWord))) {
-                track.push(S(coord, leftWord))
-            } else if (SW(coord, leftWord) && checkTrack(track, SW(coord, leftWord))) {
-                track.push(SW(coord, leftWord))
-            } else if (NW(coord, leftWord) && checkTrack(track, NW(coord, leftWord))) {
-                track.push(NW(coord, leftWord))
-            } else if (EW(coord, leftWord) && checkTrack(track, EW(coord, leftWord))) {
-                track.push(EW(coord, leftWord))
-            } else if (SE(coord, leftWord) && checkTrack(track, SE(coord, leftWord))) {
-                track.push(SE(coord, leftWord))
+            if (N(coord, letter) && checkTrack(track, N(coord, letter))) {
+                track.push(N(coord, letter))
+            } else if (W(coord, letter) && checkTrack(track, W(coord, letter))) {
+                track.push(W(coord, letter))
+            } else if (E(coord, letter) && checkTrack(track, E(coord, letter))) {
+                track.push(E(coord, letter))
+            } else if (S(coord, letter) && checkTrack(track, S(coord, letter))) {
+                track.push(S(coord, letter))
+            } else if (SW(coord, letter) && checkTrack(track, SW(coord, letter))) {
+                track.push(SW(coord, letter))
+            } else if (NW(coord, letter) && checkTrack(track, NW(coord, letter))) {
+                track.push(NW(coord, letter))
+            } else if (EW(coord, letter) && checkTrack(track, EW(coord, letter))) {
+                track.push(EW(coord, letter))
+            } else if (SE(coord, letter) && checkTrack(track, SE(coord, letter))) {
+                track.push(SE(coord, letter))
             } else {
                 i -= 2
                 track.push(track[track.length - 2])
@@ -180,13 +180,13 @@ class Boggle {
         }
     }
 
-    board (dim) {
+    board(dim) {
         const alphabet = 'AAAABCDEEEFGHIIIIJKLMNOOOPQRSTUUUVWXYZ';
         let boggleBoard = [];
         for (let i = 0; i < dim; i++) {
             boggleBoard.push([])
             for (let j = 0; j < dim; j++) {
-                let random = Math.floor(Math.random() * alphabet.length-1)
+                let random = Math.floor(Math.random() * alphabet.length - 1)
                 boggleBoard[i].push(alphabet[random])
             }
         }
@@ -194,6 +194,6 @@ class Boggle {
     }
 }
 
-const game = new Boggle (library)
+const game = new Boggle(library)
 game.printBoard()
 console.log(game.shake())
