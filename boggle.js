@@ -1,8 +1,8 @@
 const kamus = require('./data.js');
-const dummy = 'KAMUDIAADANKAKUZASKNVYLARYTLANYLATSVRTLUSKUNTAAIIAOAAOUOUAUOUOAUOIAUIJVJSKJSKJFKJSDKJSKFJKSFKSJFKSJFKJFKJFKFKSKSFKSJFKSJFOUA'
+const huruf = 'AAAAAAAAAAAAAABCDEEEEEEEEEEEFGHIIIIIIIIIIIIIJKLMNOOOOOOOOOOOOOOOOOOOOOPQRSTUUUUUUUUUUUUUUUUUUUVWXYZ'
 
 class Boggle {
-  constructor(kamus, ukuran = 10){
+  constructor(kamus, ukuran = 5){
     this.ukuran = ukuran
     this.kamus = kamus
     this.board = this.generateBoard()
@@ -10,84 +10,75 @@ class Boggle {
 
   generateBoard(){
     let board = [];
-    // const dummy = 'KAMUDIAADANKAKUR';
-    let counter = 0;
     for( let i = 0; i < this.ukuran; i++){
       board.push([]);
       for(let j = 0; j < this.ukuran; j++){
-        board[i].push(dummy[counter])
-        counter++;
+
+        // Secara otomatis akan memasukkan huruf random kedalam board
+        board[i].push(huruf[Math.ceil(Math.random()*huruf.length-1)])
       }
     }
     return board;
   }
 
-  // visited(){
-  //   let output = [];
-  //   for(let i = 0; i < this.ukuran; i++){
-  //     output.push([]);
-  //     for(let j = 0; j < this.ukuran; j++){
-  //       output[i].push(false)
-  //     }
-  //   }
-  //   return output;
-  // }
-
   solve(){
     let result = [];
     for(let i = 0; i < this.ukuran; i++){
       for(let j = 0; j < this.ukuran; j++){
-        // console.log(this.board)
         for(let k = 0; k < kamus.length; k++){
+
+          // Disini menggunakan sistem cek berdasarkan kata yang berada dalam kamus,
+          // jika kata tidak ditemukan, maka ia akan langsung dimasukkan kedala result[]
           let kata = kamus[k];
-          if(kata[0] == this.board[i][j] && this.dfs(kata,i,j)){
+          if(kata[0] === this.board[i][j] && this.search(kata,i,j)){
             result.push(kata)
           }
         }
       }
     }
-    console.log(result);
     return result;
   }
 
-  dfs(kata,i,j){
+  search(kata,i,j){
     
-    if(kata.length <= 1){
+    // Base case rekurusif, jika sudah mentok dan
+    // hanya tersisa satu huruf, maka langsung
+    // direturn true
+    if(kata.length == 1){
       return true;
     }
-
+    
+    // huruf yang pernah dilewati ditandai dengan 
+    // symbol '#' agar tidak terjadi pengecekan kembali
     this.board[i][j] = '#'
-
+    
+    // Ini merupakan proses perpidahan,
+    // saya mensimulasikan perubahan 8 arah berdasarkan i dan j
+    // dengan for looping
     for(let ii = -1; ii <= 1; ii++){
       for(let jj = -1; jj <= 1; jj++){
-
         let row = i+ii <= 0 ? i : i+ii;
         let col = j+jj <= 0 ? j : j+jj;
-
         if(row >= 0 && col >= 0 && row < this.ukuran && col < this.ukuran){
-          
-          // console.log([row,col]);
-          
-            if(this.board[row][col] == kata[1] && this.dfs(kata.slice(1) ,row ,col)){
-              this.board[i][j] = kata[0];
-              return true;
-            }
-          
-
-        
-
+          if(this.board[row][col] == kata[1] && this.search(kata.slice(1) ,row ,col)){
+            // Jika kata semua huruf kemungkinan sudah di cek,
+            // maka rubah kembali symbol '#' menjadi huruf yang semestinya,
+            // agar proses bisa terus berjalan
+            this.board[i][j] = kata[0];
+            return true;
+          }
         }
       }
     }
 
+    // Walaupun gagal, rubah kembali huruf menjadi keadaan semula
     this.board[i][j] = kata[0];
     return false;
-
   }
 }
 
-let game = new Boggle(kamus);
+let game = new Boggle(kamus,10);
 
-game.solve()
+console.log(game.solve())
+console.log(`\nBanyak kata yang ditemukan adalah = ${game.solve().length}\n`);
 console.log(game.board);
-
