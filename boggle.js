@@ -12,8 +12,8 @@ class Boggle {
         for (let i = 0; i < this.board.length; i++) {
             line += '===='
             let row = '|'
-            this.board[i].forEach(el => {
-                row += ` ${el} |`
+            this.board[i].forEach(element => {
+                row += ` ${element} |`
             })
             if (i === this.board.length - 1) {
                 box += row
@@ -24,7 +24,6 @@ class Boggle {
         console.log(line);
         console.log(box);
         console.log(line);
-
     }
 
     shake () {
