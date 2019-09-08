@@ -6,6 +6,27 @@ class Boggle {
         this.library = library
     }
 
+    printBoard() {
+        let box = ''
+        let line = ''
+        for (let i = 0; i < this.board.length; i++) {
+            line += '===='
+            let row = '|'
+            this.board[i].forEach(el => {
+                row += ` ${el} |`
+            })
+            if (i === this.board.length - 1) {
+                box += row
+            } else {
+                box += row + '\n'
+            }
+        }
+        console.log(line);
+        console.log(box);
+        console.log(line);
+
+    }
+
     shake () {
         let board = this.board
         let counter = 0
@@ -16,7 +37,7 @@ class Boggle {
                 counter++
             }
         }
-        return { board, words, counter }
+        return {words, counter }
     }
 
     solve (word, board) {
@@ -166,7 +187,7 @@ class Boggle {
         for (let i = 0; i < dim; i++) {
             boggleBoard.push([])
             for (let j = 0; j < dim; j++) {
-                let random = Math.round(Math.random() * alphabet.length)
+                let random = Math.floor(Math.random() * alphabet.length-1)
                 boggleBoard[i].push(alphabet[random])
             }
         }
@@ -175,4 +196,5 @@ class Boggle {
 }
 
 const game = new Boggle (library)
+game.printBoard()
 console.log(game.shake())
