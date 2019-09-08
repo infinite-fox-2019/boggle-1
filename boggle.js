@@ -80,6 +80,6 @@ class Boggle {
 
 }
 
-var game = new Boggle()
+let game = new Boggle()
 
 game.wordsFinder();
