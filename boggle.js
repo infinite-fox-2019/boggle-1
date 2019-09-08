@@ -1,13 +1,13 @@
 
-var dictionary = require('./data');
+// var dictionary = require('./data');
 
 
 
 class Boggle {
     constructor (num) {
         this.board = this.generateBoard(num)
-        // this.words = require('./data');
-        this.words = ['AYAM','TELOR','MAMA','PAPA','TIDUR']
+        this.words = require('./data');
+        // this.words = ['AYAM','TELOR','MAMA','PAPA','TIDUR']
         this.result = this.solve()
     }
 
@@ -78,9 +78,10 @@ class Boggle {
 
 
 
-let game = new Boggle(8)
+let game = new Boggle(4)
 console.log(game.board)
 console.log(game.result)
+// console.log(game.result.length + ' words found!')
 
 
  
