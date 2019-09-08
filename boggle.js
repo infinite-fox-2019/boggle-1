@@ -29,6 +29,7 @@ class Boggle {
     solve() {
         this.trimDictionary();
         console.log('solution:');
+
         //generate flag isVisited that mirrors the board and set all value to false
         let isVisited = [];
         for(let i = 0; i < this.board.length; i++) {
@@ -38,7 +39,7 @@ class Boggle {
             }
         }
 
-        //loop every cell in board to find words that starts with the cell's letter value
+        // loop every cell in board to find words that starts with the cell's letter value
         for(let i = 0; i < this.board.length; i++) {
             for(let j = 0; j < this.board[i].length; j++) {
                 this.findWord(i, j, isVisited, '');
@@ -72,27 +73,30 @@ class Boggle {
     }
 
     trimDictionary() {
-        //remove words that contains characters other than in board
-        let pattern = `^[${this.letters.join('')}]+$`;
-        let regexBoard = new RegExp(pattern, 'g');
         for(let i = this.dictionary.length; i >= 0; i--) {
-            if(!regexBoard.test(this.dictionary[i])) {
+            if(!this.isPossibleSolution(String(this.dictionary[i]))) {
                 this.dictionary.splice(i, 1);
             }
         }
     }
 
+    isPossibleSolution(word) {
+        let pattern = this.letters.slice('');
+        for(let i = 0; i < word.length; i++) {
+            if(pattern.indexOf(word[i]) >= 0) {
+                pattern.splice(pattern.indexOf(word[i]), 1);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }    
+
     generateLibrary(side) {
         let result = [];
-        let vowels = ['A', 'E', 'I', 'U', 'O'];
         for(let i = 0; i < 26; i++) {
             let letter = String.fromCharCode(65 + i);
             result.push(letter);
-            if(vowels.includes(letter)) {
-                for(let j = 0; j < side / 2; j++) {
-                    result.push(letter);
-                }
-            }
         }
         
         this.library = result;
