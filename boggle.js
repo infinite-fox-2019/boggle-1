@@ -1,25 +1,19 @@
 const words = require ('./data')
 
-let dummy= [
-  ['D', 'A', 'T', 'A'],
-  ['U', 'Z', 'U', 'R'],
-  ['R', 'A', 'A', 'K'],
-  ['I', 'N', 'I', 'U']
-]
-
 class Boggle {
   constructor(dimension) {
+    this.dimension = dimension
+    this.words = words
+
+    this.wordsFound = []
     this.board = []
-    this.wordsExist = []
+
     this.shake(dimension)
-    this.verticalCheck(0)
-    this.horizontalCheck(0)
   }
 
   shake(dimension) {
     // set a library of alphabet, make more on each frequently recurring letter in Indonesian language
-    const lib = 'AAAAABCDDEEEEFGHIIIIJKKKLMMNNNNOOPQRRSSTTTUUUVWXYZ'
-    // let board = []
+    const lib = 'AAAAAAAAAAABCDEEEEEEEEFGHIIIIIIIIIIJKLMNOOOOOOOOOOOOOOOOOOPQRSTUUUUUUUUUUUUUUUUVWXYZ'
     for (let i = 0; i < dimension; i++) {
       this.board.push([])
       for (let j = 0; j < dimension; j++) {
@@ -29,51 +23,60 @@ class Boggle {
     }
   }
 
-  verticalCheck(num) {
-    
-    // console.log(this.board);
-    while (num < this.board.length) {
-      let tempBoard = ''
-      for (let i = 0; i < this.board.length; i++) {
-        tempBoard += this.board[i][num]
-      }
-      while (tempBoard.length > 0) {
-        for (let i = 0; i < words.length; i++) {
-          if (tempBoard === words[i]) {
-            this.wordsExist.push(words[i])
+  solve () {
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[0].length; j++) {
+        for (let w = 0; w < words.length; w++) {
+          let kata = words[w]
+          if (kata[0] === this.board[i][j] && this.moveNext(kata, i, j)) {
+            this.wordsFound.push(kata)
           }
         }
-        tempBoard = tempBoard.slice(0, -1)
       }
-      
-      tempBoard = ''
-      num++
     }
+    return `${this.wordsFound.length} kata ditemukan: "${this.wordsFound.join(', ')}"`
   }
 
-  horizontalCheck(num) {
-    let boardH = this.board
-    while (num < boardH.length) {
-      while(boardH[num].length > 0) {
-        for (let i = 0; i < words.length; i++) {
-          if (boardH[num].join('') === words[i]) {
-            this.wordsExist.push(words[i])
-          }
-        }
-        boardH[num].pop()
-      }
-      num++
+  moveNext (kata, i, j) {
+    let neighbours = [
+      [-1,-1], // "↖"
+      [-1, 0], // "↑"
+      [-1, 1], // "↗"
+      [0, -1], // "←"
+      [0,  1], // "→"
+      [1, -1], // "↙"
+      [1,  0], // "↓"
+      [1,  1], // "↘"
+    ]
+
+    if (kata.length == 1) {
+      return true
     }
+
+    this.board[i][j] = '+'
+
+    for (let n = 0; n < neighbours.length; n++) {
+      let row = i + neighbours[n][0]
+      let col = j + neighbours[n][1]
+      if (
+      row >= 0 && row < this.board.length && 
+      col >= 0 && col < this.board[0].length) {
+        if (this.board[row][col] == kata[1] && this.moveNext(kata.slice(1), row, col)) {
+          this.board[row][col] === kata[0]
+          return true
+        }
+      }
+    }
+
+    this.board[i][j] = kata[0]
+    return false
   }
 }
 
-var game = new Boggle()
-// console.log(game.wordsExist);
-// console.log(game.shake(5));
-// console.log(game.wordsExist);
-game.shake(5)
+var game = new Boggle(5)
+
 console.log(game.board);
-console.log(game.wordsExist);
+console.log(game.solve());
 
 
 
