@@ -27,7 +27,7 @@ class Boggle {
         }
 
     }
-    wordsFinder() {
+    checkWords() {
         this.board();
         for (let i = 0; i < this.boardDisplay.length; i++) {
             for (let j = 0; j < this.boardDisplay[i].length; j++) {
@@ -79,4 +79,4 @@ class Boggle {
     }
 }
 let game = new Boggle()
-game.wordsFinder();
+game.checkWords();
