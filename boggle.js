@@ -1,6 +1,7 @@
 
-// const wordList = require('./data').words
-const wordList = ["EVANS"]
+const wordList = require('./data').words
+// const wordList = ["ABA", "EVANS"]
+
 
 class Boogle {
     constructor(besarBoard, kumpulanKata){
@@ -14,19 +15,19 @@ class Boogle {
     }
 
     board (besar){
-        let kamus = "AAAABCDEEEEFGHIJKLMNOOOOPQRSTUUUUVWXYZ"
-        // for(let i = 0 ; i<besar ; i++){
-        //     this.hasil.push([])
-        //     for(let j = 0 ; j<besar ; j++){
-        //         this.hasil[i].push(kamus[Math.floor(Math.random() * 38)])
-        //     }
-        // }
-        this.hasil = [
-            [ 'D', 'E', 'V', 'E'],
-            [ 'A', 'V', 'A', 'V'],
-            [ 'N', 'D', 'B', 'A'],
-            [ 'W', 'Z', 'S', 'N']
-        ]
+        let kamus = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        for(let i = 0 ; i<besar ; i++){
+            this.hasil.push([])
+            for(let j = 0 ; j<besar ; j++){
+                this.hasil[i].push(kamus[Math.floor(Math.random() * 26)])
+            }
+        }
+        // this.hasil = [
+        //     [ 'D', 'E', 'V', 'E'],
+        //     [ 'A', 'V', 'A', 'V'],
+        //     [ 'N', 'D', 'B', 'A'],
+        //     [ 'S', 'Z', 'S', 'N']
+        // ]
         console.table(this.hasil);
     }
 
@@ -38,20 +39,24 @@ class Boogle {
                 }
                 while(this.kordinatNow != 0){
                     let kordinatNext = this.carikordinat(this.semuaKata[i][j+1])
+                    this.ada.push(this.kordinatNow[0])
                     if (this.cariCocok(this.kordinatNow[0], kordinatNext).length != 0){
                         let kordinatCocok = this.cariCocok(this.kordinatNow[0], kordinatNext)
                         if(kordinatCocok != 0){
                             this.history.push([j, this.kordinatNow, kordinatCocok, this.ada])
-                            this.ada.push(this.kordinatNow[0])
                             this.kordinatNow = kordinatCocok
                             if(j == this.semuaKata[i].length-2){
                                 this.ketemu.push(this.semuaKata[i])
+                                // console.log(this.ada);
                             }
                             break
                         }
                     }
                     this.kordinatNow = this.kordinatNow.slice(1)
                     if(this.kordinatNow == 0 || this.history.length != 0){
+                        if(this.history.length == 0){
+                            break
+                        }
                         this.kordinatNow = this.history[this.history.length-1][1].slice(1)
                         let flag = false
                         while(this.kordinatNow.length == 0){
@@ -70,13 +75,13 @@ class Boogle {
                         this.ada = this.history[this.history.length-1][3]
                         this.history.pop()
                     }
+                    this.ada.pop()
+                    this.ada.push(this.kordinatNow[0])
                 }
             }
-            this.hasil = []
             this.history = []
             this.kordinatNow = 0
-        }
-        console.log(this.ada);
+            this.ada = []        }
         console.log(this.ketemu);
     }
     
@@ -107,12 +112,10 @@ class Boogle {
                 }
             }
         }
-        console.log("cocok", cocok);
-        
         return cocok
     }
 }
 
-let game = new Boogle(20, wordList)
+let game = new Boogle(6, wordList)
 
 game.solve()
